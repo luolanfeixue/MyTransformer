@@ -31,7 +31,13 @@ class Graph():
                 if hp.sinusoid:
                     self.enc += positional_encoding(self.x, num_units = hp.hidden_units, zero_pad = False, scale = False,
                                                     scope = 'enc_pe')
-                pass
+                else:
+                    N, T = self.x.get_shape.as_list()
+                    self.enc += embedding(tf.tile(tf.expand_dims(tf.range(T), 0), [N, 1]),vocab_size=hp.maxlen,
+                                          num_units=hp.hidden_units,zero_pad=False, scale=False,scope="enc_pe")
+
+                self.enc = tf.layers.dropout(self.enc, rate=hp.dropout_rate, training=tf.convert_to_tensor(is_training))
+
 
 if __name__ == '__main__':
     de2idx, idx2de = load_vocab(hp.de_processed_fname)
